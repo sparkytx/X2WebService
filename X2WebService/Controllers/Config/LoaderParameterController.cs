@@ -9,9 +9,9 @@ namespace X2WebService.Controllers.Config
     [ApiController]
     public class LoaderParameterController : ControllerBase
     {
-        private readonly ILoaderCrudAsync _loaderAsync;
+        private readonly ILoaderParameterCrudAsync _loaderAsync;
 
-        public LoaderParameterController(ILoaderCrudAsync loaderAsync)
+        public LoaderParameterController(ILoaderParameterCrudAsync loaderAsync)
         {
             _loaderAsync = loaderAsync;
         }

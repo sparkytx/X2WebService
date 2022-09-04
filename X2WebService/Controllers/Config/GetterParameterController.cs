@@ -12,10 +12,10 @@ namespace X2WebService.Controllers.Config
     [ApiController]
     public class GetterParameterController : Controller
     {
-        private readonly IQueryCrudAsync _crudAsync;
+        private readonly IQueryParameterCrudAsync _crudAsync;
         private readonly AuthorizationProvider _authorizationProvider;
 
-        public GetterParameterController(IQueryCrudAsync getterCallsAsync, AuthorizationProvider authorizationProvider)
+        public GetterParameterController(IQueryParameterCrudAsync getterCallsAsync, AuthorizationProvider authorizationProvider)
         {
             _crudAsync = getterCallsAsync;
             _authorizationProvider = authorizationProvider;

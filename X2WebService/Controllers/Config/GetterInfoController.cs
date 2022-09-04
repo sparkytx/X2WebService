@@ -12,10 +12,10 @@ namespace X2WebService.Controllers.Config;
 [ApiController]
 public class GetterInfoController : ControllerBase
 {
-    private readonly IGetterCrudAsync _crudAsync;
+    private readonly IGetterInfoCrudAsync _crudAsync;
     private readonly AuthorizationProvider _authorizationProvider;
 
-    public GetterInfoController(IGetterCrudAsync getterCallsAsync,AuthorizationProvider authorizationProvider)
+    public GetterInfoController(IGetterInfoCrudAsync getterCallsAsync,AuthorizationProvider authorizationProvider)
     {
         _crudAsync = getterCallsAsync;
         _authorizationProvider = authorizationProvider;

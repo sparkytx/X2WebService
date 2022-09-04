@@ -9,9 +9,11 @@ public static class Configure
 {
     public static void ConfigureContainer(ContainerBuilder containerBuilder)
     {
-        containerBuilder.RegisterType<GetterCrudAsync>().As<IGetterCrudAsync>();
+        containerBuilder.RegisterType<GetterInfoCrudAsync>().As<IGetterInfoCrudAsync>();
+        containerBuilder.RegisterType<GetterParameterCrudAsync>().As<IGetterParameterCrudAsync>();
         containerBuilder.RegisterType<GetterCallsAsync>().As<IGetterCallsAsync>();
-        containerBuilder.RegisterType<LoaderCrudAsync>().As<ILoaderCrudAsync>();
+        containerBuilder.RegisterType<LoaderInfoCrudAsync>().As<ILoaderInfoCrudAsync>();
+        containerBuilder.RegisterType<LoaderParameterCrudAsync>().As<ILoaderParameterCrudAsync>();
         containerBuilder.RegisterType<LoaderCallsAsync>().As<ILoaderCallsAsync>();
         containerBuilder.RegisterType<SourceCrudAsync>().As<ISourceCrudAsync>().As<ISourceReadOnly>().SingleInstance();
         containerBuilder.RegisterType<SqlDatabaseProvider>().As<ISqlDatabaseProvider>(); 

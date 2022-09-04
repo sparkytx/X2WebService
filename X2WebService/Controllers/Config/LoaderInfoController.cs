@@ -13,10 +13,10 @@ namespace X2WebService.Controllers.Config;
 [ApiController]
 public class LoaderInfoController : ControllerBase
 {
-    private readonly ILoaderCrudAsync _crudAsync;
+    private readonly ILoaderInfoCrudAsync _crudAsync;
     private readonly AuthorizationProvider _authorizationProvider;
 
-    public LoaderInfoController(ILoaderCrudAsync crudAsync, AuthorizationProvider authorizationProvider)
+    public LoaderInfoController(ILoaderInfoCrudAsync crudAsync, AuthorizationProvider authorizationProvider)
     {
         _crudAsync = crudAsync;
         _authorizationProvider = authorizationProvider;

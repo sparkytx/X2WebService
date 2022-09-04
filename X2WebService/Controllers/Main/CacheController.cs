@@ -9,9 +9,9 @@ namespace X2WebService.Controllers.Main;
 [ApiController]
 public class CacheController : Controller
     {
-        private readonly IQueryCrudAsync _getterCrudAsync;
+        private readonly IQueryParameterCrudAsync _getterCrudAsync;
 
-        public CacheController(IQueryCrudAsync getterCrudAsync)
+        public CacheController(IQueryParameterCrudAsync getterCrudAsync)
         {
             _getterCrudAsync = getterCrudAsync;
         }
