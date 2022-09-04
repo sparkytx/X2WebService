@@ -22,42 +22,40 @@ public class GetterInfoController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IEnumerable<QueryInfo>> GetterInfos()
+    public async Task<ActionResult<IAsyncEnumerable<GetterInfo>>> GetterInfos()
     {
-        return await _crudAsync.GetAllQueryInfoAsync();
+        var infosResults= await _crudAsync.GetAllInfosAsync();
+        return WebServiceExtension.ReturnWebResult(infosResults);
     }
 
     [HttpPost]
     [SwaggerResponse(403, "Unauthorized")]
-    public async Task<QueryStatus> Post([FromBody] QueryInfo item, [FromQuery] string? options = "")
+    public async Task<ActionResult<int>> Post([FromBody] GetterInfo item, [FromQuery] string? options = "")
     {
         try
         {
             var requestParameters = new RequestParameters(options);
-            if (!_authorizationProvider.Authorized(requestParameters.Get("IAM"), MethodBase.GetCurrentMethod()?.Name))
-                throw new Exception("Not Authorized"); //TODO return option
-            return await _crudAsync.CreateQueryInfoAsync(item);
+            if (!_authorizationProvider.Authorized(requestParameters.Get("IAM"), MethodBase.GetCurrentMethod()?.Name??"Post"))
+                return new BadRequestObjectResult("Not Authorized"); //TODO return option
+            WebServiceExtension.CleanSwaggerJson(item);
+            var id= await _crudAsync.CreateInfoAsync(item);
+            return WebServiceExtension.ReturnWebResult(id);
+
         }
         catch (Exception ex)
         {
-            //TODO return option
-            throw;
+            return new BadRequestObjectResult(ex);
         }
     }
 
     [HttpPut]
-    public async Task<QueryStatus> PutterCall([FromBody] QueryInfo item, string? options="")
+    public async Task<ActionResult<GetterInfo>> PutterCall([FromBody] GetterInfo item, string? options="")
     {
-        try
-        {
-            var requestParameters = new RequestParameters(options);
-            if (!_authorizationProvider.Authorized(requestParameters.Get("IAM"), MethodBase.GetCurrentMethod()?.Name))
-                throw new Exception("Not Authorized"); //TODO return option
-            return await _crudAsync.UpdateQueryInfoAsync(item);
-        }
-        catch (Exception ex)
-        {
-            throw;
-        }
+        var requestParameters = new RequestParameters(options);
+            if (!_authorizationProvider.Authorized(requestParameters.Get("IAM"), MethodBase.GetCurrentMethod()?.Name??"PutterCall"))
+                return new BadRequestObjectResult("Not Authorized"); //TODO return option
+            WebServiceExtension.CleanSwaggerJson(item);
+            var queryInfoResult = await _crudAsync.UpdateInfoAsync(item);
+            return WebServiceExtension.ReturnWebResult(queryInfoResult);
     }
 }

@@ -1,6 +1,10 @@
-﻿using ComTech.X2.Common;
+﻿using System.Reflection;
+using ComTech.Extensions.Core;
+using ComTech.X2.Common;
 using ComTech.X2.Common.Config;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
+
 
 namespace X2WebService.Controllers.Config;
 
@@ -9,21 +13,53 @@ namespace X2WebService.Controllers.Config;
 [ApiController]
 public class LoaderInfoController : ControllerBase
 {
-    private readonly ILoaderCrudAsync _callsAsync;
+    private readonly ILoaderCrudAsync _crudAsync;
+    private readonly AuthorizationProvider _authorizationProvider;
 
-    public LoaderInfoController(ILoaderCrudAsync callsAsync)
+    public LoaderInfoController(ILoaderCrudAsync crudAsync, AuthorizationProvider authorizationProvider)
     {
-        _callsAsync = callsAsync;
+        _crudAsync = crudAsync;
+        _authorizationProvider = authorizationProvider;
     }
 
     [HttpGet]
-    public async Task<IEnumerable<QueryCall>> GetLoaderInfos()
+    public async Task<ActionResult<IEnumerable<LoaderInfo>>> GetLoaderInfos()
     {
-        return await _callsAsync.GetAllQueryCallsAsync();
+       var infosResult= await _crudAsync.GetAllInfosAsync();
+       return WebServiceExtension.ReturnWebResult(infosResult);
     }
-    [HttpPut]
-    public async Task<QueryInfo> PutLoaderInfo(string sourceInfoName, string procName, string queryName, string options)
+    
+    //user are  not going to need this since they can use the autoloader
+    /*
+    [HttpPost]
+    [SwaggerResponse(403, "Unauthorized")]
+    public async Task<ActionResult<int>> Post([FromBody] LoaderInfo item, [FromQuery] string? options = "")
     {
-        return await _callsAsync.UpdateFromSourceAsync(sourceInfoName, procName, queryName, options);
+        try
+        {
+            var requestParameters = new RequestParameters(options);
+            if (!_authorizationProvider.Authorized(requestParameters.Get("IAM"), MethodBase.GetCurrentMethod()?.Name ?? "Post"))
+                return new BadRequestObjectResult("Not Authorized"); //TODO return option
+            WebServiceExtension.CleanSwaggerJson(item);
+            var id = await _crudAsync.CreateInfoAsync(item);
+            return WebServiceExtension.ReturnWebResult(id);
+
+        }
+        catch (Exception ex)
+        {
+            return new BadRequestObjectResult(ex);
+        }
+    }
+    */
+   
+    [HttpPut]
+    public async Task<ActionResult<LoaderInfo>> PutLoaderInfo(LoaderInfo item, string? options = "")
+    {
+        var requestParameters = new RequestParameters(options);
+        if (!_authorizationProvider.Authorized(requestParameters.Get("IAM"), MethodBase.GetCurrentMethod()?.Name ?? "PutterCall"))
+            return new BadRequestObjectResult("Not Authorized"); //TODO return option
+        WebServiceExtension.CleanSwaggerJson(item);
+       var info= await _crudAsync.UpdateInfoAsync(item);
+       return WebServiceExtension.ReturnWebResult(info);
     }
 }

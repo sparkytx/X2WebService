@@ -9,18 +9,21 @@
   <ItemGroup>
     <PackageReference Include="Autofac" Version="6.4.0" />
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="8.0.0" />
+    <PackageReference Include="FluentResults" Version="3.11.0" />
+    <PackageReference Include="LanguageExt.Core" Version="4.2.9" />
+    <PackageReference Include="NickDarvey.LanguageExt.AspNetCore" Version="1.1.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
     <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.4.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\ComTech.Extensions.Core\ComTech.Extensions.Core\ComTech.Extensions.Core.csproj" />
-    <ProjectReference Include="..\ComTech.X2.Common\ComTech.X2.Common.csproj" />
+    <ProjectReference Include="..\..\ComTech.SqlDataRepo\ComTech.SqlDataRepo\ComTech.SqlDataRepo.csproj" />
+    <ProjectReference Include="..\..\ComTech.X2.Common\ComTech.X2.Common\ComTech.X2.Common.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Controllers\DataDistributor\" />
-    <Folder Include="Controllers\Main\" />
   </ItemGroup>
 
 </Project>

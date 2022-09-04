@@ -17,14 +17,17 @@ public class GetterCallController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IEnumerable<QueryCall>> GetterCall()
+    public async Task<ActionResult<IAsyncEnumerable<GetterCall>>> GetterCall()
     {
-        return await _callsAsync.GetAllQueryCallsAsync();
+        var callsResult=  await _callsAsync.GetAllCallsAsync();
+        return WebServiceExtension.ReturnWebResult(callsResult);
+
     }
 
     [HttpPut]
-    public async Task<QueryInfo> PutterCall(string sourceInfoName, string procName, string queryName, string options)
+    public async Task<ActionResult<GetterInfo>> PutterCall(string sourceInfoName, string procName, string queryName, string options)
     {
-        return await _callsAsync.UpdateFromSourceAsync(sourceInfoName, procName, queryName, options);
+        var queryInfo= await _callsAsync.UpdateFromSourceAsync(sourceInfoName, procName, queryName, options);
+        return WebServiceExtension.ReturnWebResult(queryInfo);
     }
 }

@@ -1,4 +1,5 @@
-﻿using ComTech.X2.Common;
+﻿using System.Reflection.Metadata.Ecma335;
+using ComTech.X2.Common;
 using ComTech.X2.Common.Config;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,13 +18,15 @@ namespace X2WebService.Controllers.Config;
         }
 
         [HttpGet]
-        public async Task<IEnumerable<QueryCall>> GetLoaderCall()
+        public async Task<ActionResult<IEnumerable<LoaderCall>>> GetLoaderCall()
         {
-            return await  _callsAsync.GetAllQueryCallsAsync();
+            var calls= await  _callsAsync.GetAllCallsAsync();
+            return WebServiceExtension.ReturnWebResult<IEnumerable<QueryCall>>(calls);
         }
         [HttpPut]
-        public async Task<QueryInfo> PutLoaderCall(string sourceInfoName, string procName, string queryName, string options)
+        public async Task<ActionResult<LoaderInfo>> PutLoaderCall(string sourceInfoName, string procName, string queryName, string options)
         {
-            return await _callsAsync.UpdateFromSourceAsync(sourceInfoName, procName, queryName, options);
+            var queryInfoResult= await _callsAsync.UpdateFromSourceAsync(sourceInfoName, procName, queryName, options);
+            return WebServiceExtension.ReturnWebResult(queryInfoResult);
         }
 }
