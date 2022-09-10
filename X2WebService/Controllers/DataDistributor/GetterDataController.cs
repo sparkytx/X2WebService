@@ -6,11 +6,12 @@ using ComTech.Common;
 using ComTech.SqlDataRepo;
 using ComTech.X2.Common.Config;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace X2WebService.Controllers.DataDistributor
 {
     [Route("api/[controller]")]
-    [ApiExplorerSettings(GroupName = "Data")]
+    [ApiExplorerSettings(GroupName = "main")]
     [ApiController]
     public class GetterDataController : ControllerBase
     {
@@ -26,7 +27,8 @@ namespace X2WebService.Controllers.DataDistributor
         }
 
         [HttpGet("{name}/{*parameters}")]
-        public async Task<IActionResult> Get(string name, string parameters, [FromQuery] string format = "HTML")
+        [SwaggerOperation(OperationId = "GetData")]
+        public async Task<IActionResult> Get(string name, string? parameters="    ", [FromQuery] string format = "HTML")
         {
             var usageLogEntry = RequestPropertyHelper.CreateUsageEntry(Request);
             usageLogEntry.Command = name;
@@ -99,6 +101,7 @@ namespace X2WebService.Controllers.DataDistributor
         }
 
         [HttpPost]
+        [SwaggerOperation(OperationId = "GetDataFromQuery")]
         public async Task<IActionResult> Post([FromBody] string queryString, string sourceInfoName)
         {
             var usageLogEntry = RequestPropertyHelper.CreateUsageEntry(Request);

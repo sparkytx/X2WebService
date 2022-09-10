@@ -3,11 +3,12 @@ using ComTech.Common;
 using ComTech.SqlDataRepo;
 using ComTech.X2.Common.Config;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace X2WebService.Controllers.DataDistributor
 {
     [Route("api/[controller]")]
-    [ApiExplorerSettings(GroupName = "Data")]
+    [ApiExplorerSettings(GroupName = "data")]
     [ApiController]
     public class LoaderDataController : ControllerBase
     {
@@ -19,6 +20,8 @@ namespace X2WebService.Controllers.DataDistributor
             _infoReadOnlyAsync = infoReadOnlyAsync;
             _dataProviderAsync = dataProviderAsync;
         }
+        [HttpPost]
+        [SwaggerOperation(OperationId = "LoaderData")]
         public async Task<IActionResult> Post([FromBody] X2DataMessage x2DataMessage,[FromQuery]string options=null)
         {
             var usageLogEntry= RequestPropertyHelper.CreateUsageEntry(Request);

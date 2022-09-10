@@ -18,8 +18,8 @@ builder.Services.AddSwaggerGen(c =>
     {
         c.EnableAnnotations();
         c.SwaggerDoc("main",new OpenApiInfo{Title = "X2 Main"});
-        c.SwaggerDoc("getter", new OpenApiInfo { Title = "X2 Getter" });
-        c.SwaggerDoc("loader", new OpenApiInfo { Title = "X2 Loader" });
+      //  c.SwaggerDoc("getter", new OpenApiInfo { Title = "X2 Getter" });
+      //  c.SwaggerDoc("loader", new OpenApiInfo { Title = "X2 Loader" });
         c.SwaggerDoc("config", new OpenApiInfo { Title = "X2 Config" });
     }
 
@@ -32,8 +32,8 @@ var app = builder.Build();
     app.UseSwaggerUI(c =>
     {
         c.SwaggerEndpoint("/swagger/main/swagger.json","X2 Main");
-        c.SwaggerEndpoint("/swagger/getter/swagger.json", "X2 Getter");
-        c.SwaggerEndpoint("/swagger/loader/swagger.json", "X2 Loader");
+      //  c.SwaggerEndpoint("/swagger/getter/swagger.json", "X2 Getter");
+      //  c.SwaggerEndpoint("/swagger/loader/swagger.json", "X2 Loader");
         c.SwaggerEndpoint("/swagger/config/swagger.json", "X2 Config");
         c.DocExpansion(DocExpansion.None);
        // c.RoutePrefix = string.Empty;
