@@ -1,0 +1,228 @@
+﻿@using Microsoft.JSInterop
+@inject IJSRuntime jsRuntime
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        .accordion {
+            background-color:  orange;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 20px;
+            outline: none;
+            padding: 18px;
+            text-align: left;
+            transition: 0.4s;
+            width: 100%;
+        }
+        .active .accordion:hover {background-color:orange}
+        .accordion:after {
+            color: green;
+            content: '\002B';
+            float: right;
+            font-weight: bold;
+            margin-left: 5px;
+        }
+        .active:after { content: "\2212";}
+        .h2 {
+            font-family: sans-serif;
+            font-size: 30px;
+            text-align: center
+        }
+        .h3 {text-align: center}
+        .panel {
+            background-color: lightcyan;
+            max-height: 0;
+            padding: 0 18px;
+            transition: max-height 0.2s ease-out;
+        }
+    </style>
+</head>
+<body>
+
+<div style="background-color: azure; border: 2px solid rgb(50, 49, 48); text-align: center;">
+    <h2>X2</h2>
+    <p>Connect with your data</p>
+</div>
+
+<h3> Data Endpoints</h3>
+@for (var queryindex = 0; queryindex < Model.QueryCalls.Count; queryindex++)
+{
+    var querycall = Model.QueryCalls[queryindex];
+    var queryid = "query-" + queryindex.ToString("00");
+    var queryparms="parms-"+ queryindex.ToString("00");
+    var btnid="btn-"+ queryindex.ToString("00");
+
+    <button class="accordion">@querycall.Name</button>
+    <div class="table" style="width: 100%">
+    <thread>
+        <tr>
+            <th style="text-align: left; width: 50%">
+                <h3>Name</h3>
+            </th>
+            <th style="text-align: left; width: 50%">
+                <h3>Description</h3>
+            </th>
+        </tr>
+    </thread>
+        <tbody>
+        @for (var paraindex = 0; paraindex < querycall.Parameters.Count; paraindex++)
+        {
+            var i = paraindex;
+            var classname = "txt-" + queryindex.ToString("00");
+            var paramid = classname + "-" + paraindex.ToString("00");
+            int count = querycall.Parameters.Count;
+            var parameter = querycall.Parameters[paraindex];
+            <tr>
+                <td>
+                    <h4>@parameter</h4>
+                </td>
+                <td>
+                    <input type="text" class=@classname id=@paramid onchange="UpdateQuery(this)"/>
+                </td>
+            </tr>
+        }
+        <tr style="min-height:20px"></tr>
+        <tr>
+            <td>
+                <div style="padding-bottom: 40px">
+                    <div style="padding-right: 60px; float: left">
+                        <button class="@btnid" onclick="Copy(this)">
+                            <h3>Copy</h3>
+                        </button>
+                    </div>
+                    <div style="padding-right: 60px; float: left">
+                        <button class="@btnid" onclick="Paste(this)">
+                            <h3>Paste</h3>
+                        </button>
+                    </div>
+                    <div style="padding-right: 60px; float: left">
+                        <button class="@btnid" onclick="GetQuery(this)">
+                            <h3>GetQuery</h3>
+                        </button>
+                    </div>
+                    <div style="padding-right: 60px; float: left">
+                        <button class="@btnid" onclick="GetData(this)">
+                            <h3>GetData</h3>
+                        </button>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <tr style="min-height:20px"></tr>
+        <tr>
+            <td colspan="2">
+                <h3>
+                    <div id=@queryid style="border-style:solid">@Model.BaseUrl/API/GETDATA/@querycall.Name/<label id=@queryparms></label></div>
+                </h3>
+
+            </td>
+        </tr>
+        </tbody>   
+    </div>
+ }
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+    var acc = document.getElementsByClassName("accordion");
+    var i;
+    for (i = 0; i < acc.length; i++) {
+        acc[i].addEventListener("click",
+            function() {
+
+                this.classList.toggle("active");
+                var panel = this.nextElementSibling;
+                if (panel.style.maxHeight) {
+                    panel.style.maxHeight = null;
+                } else {
+                    panel.style.maxHeight = panel.scrollHeight + "px";
+                }
+            }
+        );
+    }
+    function Copy(element) {
+        var searchstring = "#" + element.className.replace("btn", "query");
+        var text = jQuery(searchstring)[0].innerText;
+        if (navigator.clipboard) {
+            appCopytoClipBoard(text);
+            alert(text + " Copied");
+        }
+    }
+
+    function Paste(element) {
+        var searchstring = "#" + element.className.replace("btn", "txt");
+        try {
+            if (navigator.clipboard) {
+                navigator.permission.query({ name: "clipboard-read" }).then((result) => {
+                    if (result.state == "granted" || result.state == "prompt") {
+                        navigator.clipboard.readText().then((copiedText) => {
+                                var items = copiedText.split("\n");
+                                for (let i = 0; i < items.length; i++) {
+                                    var key = searchstring + "-" + i.toString().padStart(2, 0);
+                                    $(key).valueOf(items[i]);
+                                }
+                                UpdateQuery(element);
+                            }
+                        );
+                    } else {
+                        alert("Clipboard method not permitted");
+                    }
+                });
+
+
+            } else {
+                alert("fail");
+            }
+        }
+function GetData(element) {
+    var searchstring = "#" + element.className.replace("btn", "query");
+    var text = jQuery(searchstring[0]).innerText;
+    window.open(text);
+}
+function appCopyToClipBoard(sText) {
+    var oText = false;
+    bResult = false;
+    try {
+        oText = document.createElement("textarea");
+        $(oText).addClass('ClipboardCopier').val(sText).insertChildAfter('body').focus();
+        $oText.select();
+        document.execCommand("Copy");
+        bResult = true;
+    } catch (e) {
+        $(oText).remove();
+        return bResult;
+    }
+}
+function right(str, chr) {
+    return str.slice(-(chr));
+}
+function updateQuery(element) {
+    var id = element.classNamne.slice(-3);
+    var txtelement = "txt" + id;
+    var searchstring = "." + txtelement;
+    var count = jQuery(searchstring).length;
+    var url = "";
+    for (let i = 0; i < count; i++) {
+        searchstring = "#" + txtelement + "-" + ('00' + i).slice(-2);
+        url = url + "~" + jQuery(searchstring).val();
+        }
+    searchstring = "#parms" + id;
+    jQuery(searchstring).html(url.substring(1));
+}
+
+</script>
+
+<footer>
+    <div style="background-color: azure; text-align: left">
+        @Model.VersionString
+        <span style="float:right">@Model.UserName</span>
+
+    </div> 
+</footer>
+
+
+</body>

@@ -44,6 +44,14 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
-app.MapControllers();
+app.UseRouting();
+app.UseEndpoints(endpoints =>
+    {
+        endpoints.MapControllers();
+        endpoints.MapControllerRoute("home", "{controller=Home}/{Action=Index}");
+        endpoints.MapControllerRoute("queryedit", "{controller=QueryEdit}/{Action=Index}");
+    }
+);
+//app.MapControllers();
 
 app.Run();

@@ -2,6 +2,7 @@
 using ComTech.Extensions.Core;
 using ComTech.X2.Common;
 using ComTech.X2.Common.Config;
+using FluentResults;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -13,11 +14,13 @@ namespace X2WebService.Controllers.Config;
 public class GetterInfoController : ControllerBase
 {
     private readonly IGetterInfoCrudAsync _crudAsync;
+    private readonly IGetterInfoReadOnlyAsync _getterCallsAsync;
     private readonly AuthorizationProvider _authorizationProvider;
 
-    public GetterInfoController(IGetterInfoCrudAsync getterCallsAsync,AuthorizationProvider authorizationProvider)
+    public GetterInfoController(IGetterInfoCrudAsync getterInfoAsync,IGetterInfoReadOnlyAsync getterCallsAsync, AuthorizationProvider authorizationProvider)
     {
-        _crudAsync = getterCallsAsync;
+        _crudAsync = getterInfoAsync;
+        _getterCallsAsync = getterCallsAsync;
         _authorizationProvider = authorizationProvider;
     }
 
@@ -26,6 +29,23 @@ public class GetterInfoController : ControllerBase
     {
         var infosResults= await _crudAsync.GetAllInfosAsync();
         return WebServiceExtension.ReturnWebResult(infosResults);
+    }
+    [HttpGet("Calls")]
+    [SwaggerOperation(OperationId = "GetCalls")]
+    public async Task<ActionResult<IEnumerable<QueryInfo>>> GetterCalls()
+    {
+        try
+        {
+            var infosResult = await _getterCallsAsync.GetCallsAsync(); 
+            if (infosResult.IsFailed)
+                return new BadRequestObjectResult(infosResult.Errors);
+            return Ok(infosResult.Value);
+        }
+        catch (Exception e)
+        {
+            return new BadRequestObjectResult(e.Message);
+        }
+        
     }
 
     [HttpPost]

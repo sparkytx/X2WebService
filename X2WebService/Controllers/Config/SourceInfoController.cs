@@ -47,6 +47,8 @@ namespace X2WebService.Controllers.Config
                 if (!_authorizationProvider.Authorized(requestParameters.Get("IAM"), MethodBase.GetCurrentMethod()?.Name ?? "Post"))
                     return new BadRequestObjectResult("Not Authorized"); //TODO return option
                 WebServiceExtension.CleanSwaggerJson(item);
+                if (string.IsNullOrEmpty(item.Type))
+                    item.Type = "SQL";
                 var id = await _crudAsync.CreateInfoAsync(item);
                 return WebServiceExtension.ReturnWebResult(id);
             }

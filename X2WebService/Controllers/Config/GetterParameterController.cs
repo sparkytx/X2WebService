@@ -12,10 +12,10 @@ namespace X2WebService.Controllers.Config
     [ApiController]
     public class GetterParameterController : Controller
     {
-        private readonly IQueryParameterCrudAsync _crudAsync;
+        private readonly IGetterParameterCrudAsync _crudAsync;
         private readonly AuthorizationProvider _authorizationProvider;
 
-        public GetterParameterController(IQueryParameterCrudAsync getterCallsAsync, AuthorizationProvider authorizationProvider)
+        public GetterParameterController(IGetterParameterCrudAsync getterCallsAsync, AuthorizationProvider authorizationProvider)
         {
             _crudAsync = getterCallsAsync;
             _authorizationProvider = authorizationProvider;
@@ -48,7 +48,7 @@ namespace X2WebService.Controllers.Config
         }*/
 
         [HttpPut]
-        public async Task<ActionResult<GetterInfo>> PutterCall([FromBody] QueryParameterInfo item, string options = "")
+        public async Task<ActionResult<GetterInfo>> PutterCall([FromBody] GetterParameterInfo item, string? options = "")
         {
             try
             {
