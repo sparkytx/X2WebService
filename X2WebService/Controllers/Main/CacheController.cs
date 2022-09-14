@@ -9,9 +9,9 @@ namespace X2WebService.Controllers.Main;
 [ApiController]
 public class CacheController : Controller
     {
-        private readonly IQueryParameterCrudAsync _getterCrudAsync;
+        private readonly IInfoCrudAsync<QueryParameterInfo> _getterCrudAsync;
 
-        public CacheController(IQueryParameterCrudAsync getterCrudAsync)
+        public CacheController(IInfoCrudAsync<QueryParameterInfo> getterCrudAsync)
         {
             _getterCrudAsync = getterCrudAsync;
         }
@@ -19,7 +19,7 @@ public class CacheController : Controller
     [HttpPut] 
     public async Task RefreshCache()
     {
-             await  _getterCrudAsync.RefreshCacheAsync();
+             await  _getterCrudAsync.RefreshInfoAsync();
      }
     }
 

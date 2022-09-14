@@ -12,10 +12,10 @@ namespace X2WebService.Controllers.Config
     [ApiController]
     public class GetterParameterController : Controller
     {
-        private readonly IGetterParameterCrudAsync _crudAsync;
+        private readonly IGetterParameterInfoCrudAsync _crudAsync;
         private readonly AuthorizationProvider _authorizationProvider;
 
-        public GetterParameterController(IGetterParameterCrudAsync getterCallsAsync, AuthorizationProvider authorizationProvider)
+        public GetterParameterController(IGetterParameterInfoCrudAsync getterCallsAsync, AuthorizationProvider authorizationProvider)
         {
             _crudAsync = getterCallsAsync;
             _authorizationProvider = authorizationProvider;
@@ -24,7 +24,7 @@ namespace X2WebService.Controllers.Config
         [HttpGet]
         public async Task<ActionResult<IEnumerable<GetterParameterInfo>>> GetterInfos()
         {
-            var r = await _crudAsync.GetAllParametersAsync();
+            var r = await _crudAsync.GetAllInfosAsync();
             return WebServiceExtension.ReturnWebResult(r);
         }
 
@@ -56,7 +56,7 @@ namespace X2WebService.Controllers.Config
                 if (!_authorizationProvider.Authorized(requestParameters.Get("IAM"), MethodBase.GetCurrentMethod()?.Name ?? "PutterCall"))
                     return new BadRequestObjectResult("Not Authorized"); //TODO return option
                 WebServiceExtension.CleanSwaggerJson(item);
-                var queryInfoResult = await _crudAsync.UpdateParameterAsync(item);
+                var queryInfoResult = await _crudAsync.UpdateInfoAsync(item);
                 return WebServiceExtension.ReturnWebResult(queryInfoResult);
 
             }

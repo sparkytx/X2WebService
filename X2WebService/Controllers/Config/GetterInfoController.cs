@@ -1,8 +1,8 @@
 ﻿using System.Reflection;
+using System.Text.Json;
 using ComTech.Extensions.Core;
 using ComTech.X2.Common;
 using ComTech.X2.Common.Config;
-using FluentResults;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -32,14 +32,16 @@ public class GetterInfoController : ControllerBase
     }
     [HttpGet("Calls")]
     [SwaggerOperation(OperationId = "GetCalls")]
-    public async Task<ActionResult<IEnumerable<QueryInfo>>> GetterCalls()
+    public async Task<ActionResult<List<QueryInfo>>> GetterCalls()
     {
         try
         {
             var infosResult = await _getterCallsAsync.GetCallsAsync(); 
             if (infosResult.IsFailed)
                 return new BadRequestObjectResult(infosResult.Errors);
-            return Ok(infosResult.Value);
+            var text = JsonSerializer.Serialize(infosResult.Value.ToList());
+            List<QueryCall> obj = JsonSerializer.Deserialize<List<QueryCall>>(text);
+            return Ok(infosResult.Value.ToList());
         }
         catch (Exception e)
         {

@@ -12,10 +12,10 @@ namespace X2WebService.Controllers.Config
     [ApiController]
     public class SourceInfoController :ControllerBase
     {
-        private ISourceCrudAsync _crudAsync;
+        private ISourceInfoCrudAsync _crudAsync;
         private readonly AuthorizationProvider _authorizationProvider;
 
-        public SourceInfoController(ISourceCrudAsync crudAsync,AuthorizationProvider authorizationProvider)
+        public SourceInfoController(ISourceInfoCrudAsync crudAsync,AuthorizationProvider authorizationProvider)
         {
             _crudAsync = crudAsync;
             _authorizationProvider = authorizationProvider;
@@ -32,7 +32,7 @@ namespace X2WebService.Controllers.Config
         [SwaggerOperation(OperationId="GetSingleInfo")]
         public async Task<ActionResult<SourceInfo>> GetterInfo(string name)
         {
-            var r = await _crudAsync.GetInfoAsync(name);
+            var r = await _crudAsync.GetInfosAsync(name);
             return WebServiceExtension.ReturnWebResult(r);
         }*/
 

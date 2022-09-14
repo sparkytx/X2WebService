@@ -9,9 +9,9 @@ namespace X2WebService.Controllers.Config
     [ApiController]
     public class LoaderParameterController : ControllerBase
     {
-        private readonly ILoaderParameterCrudAsync _loaderAsync;
+        private readonly IInfoCrudAsync<LoaderParameterInfo> _loaderAsync;
 
-        public LoaderParameterController(ILoaderParameterCrudAsync loaderAsync)
+        public LoaderParameterController(IInfoCrudAsync<LoaderParameterInfo> loaderAsync)
         {
             _loaderAsync = loaderAsync;
         }
@@ -19,14 +19,14 @@ namespace X2WebService.Controllers.Config
         [HttpGet]
         public async Task<ActionResult<IEnumerable<LoaderParameterInfo>>> GetLoaderParameters()
         {
-            var parameterResults= await _loaderAsync.GetAllParametersAsync();
+            var parameterResults= await _loaderAsync.GetAllInfosAsync();
             return WebServiceExtension.ReturnWebResult(parameterResults);
         }
         [HttpPut]
         public async Task<ActionResult<LoaderParameterInfo>> PutLoaderInfo(LoaderParameterInfo item)
         {
             WebServiceExtension.CleanSwaggerJson(item);
-            var parameterResults= await _loaderAsync.UpdateParameterAsync(item);
+            var parameterResults= await _loaderAsync.UpdateInfoAsync(item);
             return WebServiceExtension.ReturnWebResult(parameterResults);
         }
     }
