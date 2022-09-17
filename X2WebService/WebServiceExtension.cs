@@ -1,7 +1,9 @@
 ﻿using System.ComponentModel;
 using FluentResults;
+using LanguageExt;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace X2WebService;
 
@@ -13,6 +15,7 @@ public static class WebServiceExtension
             return new OkObjectResult(result.Value);
         return new BadRequestObjectResult(string.Join(";", result.Errors));
     }
+   
 
     public static void CleanSwaggerJson(object param)
     {
@@ -31,4 +34,23 @@ public static class WebServiceExtension
         }
     }
 
+}
+
+public class BadRequestObjectResultErrors : BadRequestObjectResult
+{
+    public BadRequestObjectResultErrors(object? error) : base(Parse(error))
+    {
+        
+    }
+
+    private static object? Parse(object? error)
+    {
+        if (error is List<IError> errors)
+            return string.Join(';', errors.Select(e=>e.Message));
+        return error;
+    }
+
+    public BadRequestObjectResultErrors(ModelStateDictionary modelState) : base(modelState)
+    {
+    }
 }

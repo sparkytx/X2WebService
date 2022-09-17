@@ -38,7 +38,7 @@ public class GetterInfoController : ControllerBase
         {
             var infosResult = await _getterCallsAsync.GetCallsAsync(); 
             if (infosResult.IsFailed)
-                return new BadRequestObjectResult(infosResult.Errors);
+                return new BadRequestObjectResultErrors(infosResult.Errors);
             var text = JsonSerializer.Serialize(infosResult.Value.ToList());
             List<QueryCall> obj = JsonSerializer.Deserialize<List<QueryCall>>(text);
             return Ok(infosResult.Value.ToList());

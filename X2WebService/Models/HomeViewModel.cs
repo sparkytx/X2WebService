@@ -30,6 +30,7 @@ namespace X2WebService.Models
                 Assembly assembly = Assembly.GetExecutingAssembly();
                 FileVersionInfo fileVersionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
                 UserName =  GetCurrent().Name;
+                VersionString= fileVersionInfo.FileVersion;
             }
             catch (Exception ex)
             {

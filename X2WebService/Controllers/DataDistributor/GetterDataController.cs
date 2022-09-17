@@ -28,7 +28,7 @@ namespace X2WebService.Controllers.DataDistributor
 
         [HttpGet("{name}/{*parameters}")]
         [SwaggerOperation(OperationId = "GetData")]
-        public async Task<IActionResult> Get(string name, string? parameters="    ", [FromQuery] string format = "HTML")
+        public async Task<IActionResult> Get(string name, string? parameters=" ", [FromQuery] string? format = "TEXT")
         {
             var usageLogEntry = RequestPropertyHelper.CreateUsageEntry(Request);
             usageLogEntry.Command = name;
@@ -42,11 +42,15 @@ namespace X2WebService.Controllers.DataDistributor
                 var curveDefintionResult = await _getterInfo.GetQueryDefinitionAsync(name);
                 if (curveDefintionResult.IsFailed)
                     return NotFound();
-
-                var dataResponse = await _dataProviderAsync.ExecSqlQueryAsync(curveDefintionResult.Value.Info.Query,curveDefintionResult.Value.SourceInfo,parameters);
+                var parameterStrings = parameters==null?null: parameters.Trim().Split("~");
+                var dataResponse = await _dataProviderAsync.ExecSqlQueryAsync(curveDefintionResult.Value.Info.Query,curveDefintionResult.Value.SourceInfo,curveDefintionResult.Value.Parameters,parameterStrings);
                 if (dataResponse.IsFailed)
-                    return new BadRequestObjectResult("No data found");
+                {
+                    throw new Exception(string.Join(";", dataResponse.Errors.ToList().Select(e => e.Message)));
+                }
+                    
                 usageLogEntry.Count = dataResponse.Value.RowCount;
+                dataResponse.Value.Name = name;
                 return FormatResponseDataContent(format, dataResponse.Value);
                 //TODO log
 
@@ -74,7 +78,7 @@ namespace X2WebService.Controllers.DataDistributor
                 var statusCode = HttpStatusCode.InternalServerError.GetHashCode();
                 if (ex.Errors[0].Number is 596 or 10054)
                 {
-                    message = "Requestr was terminated most like due to long running query";
+                    message = "Request was terminated most like due to long running query";
                     statusCode = HttpStatusCode.RequestTimeout.GetHashCode();
                 }
 
@@ -100,6 +104,7 @@ namespace X2WebService.Controllers.DataDistributor
             }
         }
 
+
         [HttpPost]
         [SwaggerOperation(OperationId = "GetDataFromQuery")]
         public async Task<IActionResult> Post([FromBody] string queryString, string sourceInfoName)
@@ -112,7 +117,7 @@ namespace X2WebService.Controllers.DataDistributor
                 usageLogEntry.AppName = sourceInfoName;
                 var sourceInfoResult = await _sourceReadOnly.GetInfoAsync(sourceInfoName);
                 if (sourceInfoResult.IsFailed)
-                    return new BadRequestObjectResult(sourceInfoResult.Errors);
+                    return new BadRequestObjectResultErrors(sourceInfoResult.Errors);
                 var  dataResponse= _dataProviderAsync.ExecSqlQueryAsync(queryString,sourceInfoResult.Value);
                return new OkObjectResult(dataResponse);
             }

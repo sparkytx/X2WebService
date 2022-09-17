@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
         .accordion {
-            background-color: blue;
+            background-color: #14477d;
             border: none;
             color: white;
             cursor: pointer;
@@ -20,10 +20,10 @@
             width: 100%;
         }
 
-        .active .accordion:hover { background-color: blue; }
+        .active .accordion:hover { background-color: #14477d; }
 
         .accordion:after {
-            color: green;
+            color: azure;
             content: '\002B';
             float: right;
             font-weight: bold;
@@ -51,8 +51,8 @@
 </head>
 <body>
 
-<div style="background-color: azure; border: 2px solid rgb(50, 49, 48); text-align: center;">
-    <h2>X2</h2>
+<div style="background-color: azure; border: 2px solid #14477d; text-align: center;">
+    <h2>X360</h2>
     <p>Connect with your data</p>
 </div>
 
@@ -125,7 +125,7 @@
             <tr>
                 <td colspan="2">
                     <h3>
-                        <div id=@queryid style="border-style: solid">@Model.BaseUrl/API/GETDATA/@querycall.Name/<label id=@queryparms></label></div>
+                        <div id=@queryid style="border-style: solid">@Model.BaseUrl/API/GETTERDATA/@querycall.Name/<label id=@queryparms></label></div>
                     </h3>
 
                 </td>
@@ -135,7 +135,7 @@
     </div>
 }
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
 <script>
     var acc = document.getElementsByClassName("accordion");
     var i;
@@ -193,8 +193,14 @@
 
         function GetData(element) {
             var searchstring = "#" + element.className.replace("btn", "query");
-            var text = jQuery(searchstring[0]).innerText;
+            var text = jQuery(searchstring)[0].innerText;
+            alert(text);
             window.open(text);
+        }
+        function GetQuery(element) {
+        var searchstring = "#" + element.className.replace("btn", "query");
+        var text = jQuery(searchstring)[0].innerText;
+        window.open(text);
         }
 
         function appCopyToClipBoard(sText) {
@@ -216,8 +222,8 @@
             return str.slice(-(chr));
         }
 
-        function updateQuery(element) {
-            var id = element.classNamne.slice(-3);
+        function UpdateQuery(element) {
+            var id = element.className.slice(-3);
             var txtelement = "txt" + id;
             var searchstring = "." + txtelement;
             var count = jQuery(searchstring).length;
@@ -233,7 +239,7 @@
         </script>
 </body>
 <footer>
-    <div style="background-color: azure; text-align: left">
+    <div style="background-color: #5f5f5f; text-align: left">
         @Model.VersionString
         <span style="float: right">@Model.UserName</span>
 
