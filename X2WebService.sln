@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ComTech.X2.Common", "..\Com
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ComTech.SqlDataRepo", "..\ComTech.SqlDataRepo\ComTech.SqlDataRepo\ComTech.SqlDataRepo.csproj", "{48386645-C1E8-473D-8ED1-A8D69BD776F0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "X2.WebService.Test", "X2.WebService.Test\X2.WebService.Test.csproj", "{B59636CA-5434-424A-A2E9-8DE9D1B4B649}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "X2.WebService.Test", "X2.WebService.Test\X2.WebService.Test.csproj", "{B59636CA-5434-424A-A2E9-8DE9D1B4B649}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

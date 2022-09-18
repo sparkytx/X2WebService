@@ -35,7 +35,7 @@ namespace X2WebService.Controllers.DataDistributor
                 usageLogEntry.Count = x2DataMessage.RowCount;
                 var queryDefinitionResult = await _infoReadOnlyAsync.GetQueryDefinitionAsync(x2DataMessage.Name);
                 if (queryDefinitionResult.IsFailed)
-                    return new BadRequestObjectResultErrors(queryDefinitionResult.Errors);
+                    return new BadRequestErrors(queryDefinitionResult.Errors);
                 x2DataMessage.Name = usageLogEntry.LogId;
                 return new OkObjectResult(await _dataProviderAsync.LoadData(x2DataMessage, queryDefinitionResult.Value));
             }
@@ -43,7 +43,7 @@ namespace X2WebService.Controllers.DataDistributor
             {
                 usageLogEntry.Success = false;
                 usageLogEntry.ResponseMessage = ex.Message;
-                return new BadRequestObjectResult(ex.Message);
+                return  BadRequest(ex.Message);
             }
             catch (Exception ex)
             {

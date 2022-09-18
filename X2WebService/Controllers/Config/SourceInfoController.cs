@@ -45,7 +45,7 @@ namespace X2WebService.Controllers.Config
             {
                 var requestParameters = new RequestParameters(options);
                 if (!_authorizationProvider.Authorized(requestParameters.Get("IAM"), MethodBase.GetCurrentMethod()?.Name ?? "Post"))
-                    return new BadRequestObjectResult("Not Authorized"); //TODO return option
+                    return  BadRequest("Not Authorized"); //TODO return option
                 WebServiceExtension.CleanSwaggerJson(item);
                 if (string.IsNullOrEmpty(item.Type))
                     item.Type = "SQL";
@@ -54,7 +54,7 @@ namespace X2WebService.Controllers.Config
             }
             catch (Exception ex)
             {
-                return new BadRequestObjectResult(ex);
+                return BadRequest(ex);
             }
         }
 
@@ -63,7 +63,7 @@ namespace X2WebService.Controllers.Config
         {
             var requestParameters = new RequestParameters(options);
             if (!_authorizationProvider.Authorized(requestParameters.Get("IAM"), MethodBase.GetCurrentMethod()?.Name ?? "PutterCall"))
-                return new BadRequestObjectResult("Not Authorized"); //TODO return option
+                return BadRequest("Not Authorized"); //TODO return option
             WebServiceExtension.CleanSwaggerJson(item);
             var queryInfoResult = await _crudAsync.UpdateInfoAsync(item);
             return WebServiceExtension.ReturnWebResult(queryInfoResult);

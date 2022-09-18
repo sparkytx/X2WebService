@@ -43,7 +43,7 @@ public class LoaderInfoController : ControllerBase
         }
         catch (Exception e)
         {
-            return new BadRequestObjectResult(e.Message);
+            return BadRequest(e.Message);
         }
 
     }
@@ -58,7 +58,7 @@ public class LoaderInfoController : ControllerBase
         {
             var requestParameters = new RequestParameters(options);
             if (!_authorizationProvider.Authorized(requestParameters.Get("IAM"), MethodBase.GetCurrentMethod()?.Name ?? "Post"))
-                return new BadRequestObjectResult("Not Authorized"); //TODO return option
+                return BadRequest("Not Authorized"); //TODO return option
             WebServiceExtension.CleanSwaggerJson(item);
             var id = await _crudAsync.CreateInfoAsync(item);
             return WebServiceExtension.ReturnWebResult(id);
@@ -66,7 +66,7 @@ public class LoaderInfoController : ControllerBase
         }
         catch (Exception ex)
         {
-            return new BadRequestObjectResult(ex.Message);
+            return  BadRequest(ex.Message);
         }
     }
     
@@ -76,7 +76,7 @@ public class LoaderInfoController : ControllerBase
     {
         var requestParameters = new RequestParameters(options);
         if (!_authorizationProvider.Authorized(requestParameters.Get("IAM"), MethodBase.GetCurrentMethod()?.Name ?? "PutterCall"))
-            return new BadRequestObjectResult("Not Authorized"); //TODO return option
+            return BadRequest("Not Authorized"); //TODO return option
         WebServiceExtension.CleanSwaggerJson(item);
        var info= await _crudAsync.UpdateInfoAsync(item);
        return WebServiceExtension.ReturnWebResult(info);

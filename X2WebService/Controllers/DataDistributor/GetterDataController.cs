@@ -1,6 +1,5 @@
 ﻿using System.Data.SqlClient;
 using System.Net;
-using System.Runtime.Serialization;
 using System.Text;
 using ComTech.Common;
 using ComTech.SqlDataRepo;
@@ -46,7 +45,7 @@ namespace X2WebService.Controllers.DataDistributor
                 var dataResponse = await _dataProviderAsync.ExecSqlQueryAsync(curveDefintionResult.Value.Info.Query,curveDefintionResult.Value.SourceInfo,curveDefintionResult.Value.Parameters,parameterStrings);
                 if (dataResponse.IsFailed)
                 {
-                    throw new Exception(string.Join(";", dataResponse.Errors.ToList().Select(e => e.Message)));
+                    return BadRequest(string.Join(";", dataResponse.Errors.ToList().Select(e => e.Message)));
                 }
                     
                 usageLogEntry.Count = dataResponse.Value.RowCount;
@@ -59,7 +58,7 @@ namespace X2WebService.Controllers.DataDistributor
             {
                 usageLogEntry.Success = false;
                 usageLogEntry.ResponseMessage = ex.Message;
-                return new BadRequestObjectResult(ex.Message);
+                return BadRequest(ex.Message);
             }
             catch (TimeoutException te)
             {
@@ -117,7 +116,7 @@ namespace X2WebService.Controllers.DataDistributor
                 usageLogEntry.AppName = sourceInfoName;
                 var sourceInfoResult = await _sourceReadOnly.GetInfoAsync(sourceInfoName);
                 if (sourceInfoResult.IsFailed)
-                    return new BadRequestObjectResultErrors(sourceInfoResult.Errors);
+                    return new BadRequestErrors(sourceInfoResult.Errors);
                 var  dataResponse= _dataProviderAsync.ExecSqlQueryAsync(queryString,sourceInfoResult.Value);
                return new OkObjectResult(dataResponse);
             }

@@ -13,7 +13,7 @@ public static class WebServiceExtension
     {
         if (result.IsSuccess)
             return new OkObjectResult(result.Value);
-        return new BadRequestObjectResult(string.Join(";", result.Errors));
+        return new BadRequestErrors(result.Errors);
     }
    
 
@@ -36,9 +36,9 @@ public static class WebServiceExtension
 
 }
 
-public class BadRequestObjectResultErrors : BadRequestObjectResult
+public class BadRequestErrors : BadRequestObjectResult
 {
-    public BadRequestObjectResultErrors(object? error) : base(Parse(error))
+    public BadRequestErrors(object? error) : base(Parse(error))
     {
         
     }
@@ -50,7 +50,7 @@ public class BadRequestObjectResultErrors : BadRequestObjectResult
         return error;
     }
 
-    public BadRequestObjectResultErrors(ModelStateDictionary modelState) : base(modelState)
+    public BadRequestErrors(ModelStateDictionary modelState) : base(modelState)
     {
     }
 }

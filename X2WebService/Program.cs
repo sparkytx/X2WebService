@@ -27,8 +27,7 @@ builder.Services.AddSwaggerGen(c =>
 
 var app = builder.Build();
 
-
-    app.UseSwagger();
+app.UseSwagger();
     app.UseSwaggerUI(c =>
     {
         c.SwaggerEndpoint("/swagger/main/swagger.json","X2 Main");
@@ -48,7 +47,7 @@ app.UseRouting();
 app.UseEndpoints(endpoints =>
     {
         endpoints.MapControllers();
-        endpoints.MapControllerRoute("home", "{controller=Home}/{Action=Index}");
+        endpoints.MapControllerRoute("default", "{controller=Home}/{Action=Index}");
         endpoints.MapControllerRoute("queryedit", "{controller=QueryEdit}/{Action=Index}");
     }
 );

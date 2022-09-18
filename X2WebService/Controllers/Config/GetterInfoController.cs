@@ -38,14 +38,14 @@ public class GetterInfoController : ControllerBase
         {
             var infosResult = await _getterCallsAsync.GetCallsAsync(); 
             if (infosResult.IsFailed)
-                return new BadRequestObjectResultErrors(infosResult.Errors);
+                return new BadRequestErrors(infosResult.Errors);
             var text = JsonSerializer.Serialize(infosResult.Value.ToList());
             List<QueryCall> obj = JsonSerializer.Deserialize<List<QueryCall>>(text);
             return Ok(infosResult.Value.ToList());
         }
         catch (Exception e)
         {
-            return new BadRequestObjectResult(e.Message);
+            return BadRequest(e.Message);
         }
         
     }
@@ -58,7 +58,7 @@ public class GetterInfoController : ControllerBase
         {
             var requestParameters = new RequestParameters(options);
             if (!_authorizationProvider.Authorized(requestParameters.Get("IAM"), MethodBase.GetCurrentMethod()?.Name??"Post"))
-                return new BadRequestObjectResult("Not Authorized"); //TODO return option
+                return BadRequest("Not Authorized"); //TODO return option
             WebServiceExtension.CleanSwaggerJson(item);
             var id= await _crudAsync.CreateInfoAsync(item);
             return WebServiceExtension.ReturnWebResult(id);
@@ -66,7 +66,7 @@ public class GetterInfoController : ControllerBase
         }
         catch (Exception ex)
         {
-            return new BadRequestObjectResult(ex);
+            return BadRequest(ex);
         }
     }
 
@@ -75,7 +75,7 @@ public class GetterInfoController : ControllerBase
     {
         var requestParameters = new RequestParameters(options);
             if (!_authorizationProvider.Authorized(requestParameters.Get("IAM"), MethodBase.GetCurrentMethod()?.Name??"PutterCall"))
-                return new BadRequestObjectResult("Not Authorized"); //TODO return option
+                return BadRequest("Not Authorized"); //TODO return option
             WebServiceExtension.CleanSwaggerJson(item);
             var queryInfoResult = await _crudAsync.UpdateInfoAsync(item);
             return WebServiceExtension.ReturnWebResult(queryInfoResult);

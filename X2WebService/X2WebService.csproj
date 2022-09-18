@@ -30,4 +30,10 @@
     <_ContentIncludedByDefault Remove="Pages\QueryEdit\Index.cshtml" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="wwwroot\css\site.css">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>
