@@ -92,7 +92,7 @@
                 var parameter = querycall.Parameters[paraindex];
                 <tr>
                     <td>
-                        <h4>@parameter</h4>
+                        <h4>@parameter.Name</h4>
                     </td>
                     <td>
                         <input type="text" class=@classname id=@paramid onchange="UpdateQuery(this)"/>
@@ -139,6 +139,14 @@
         </table>
     </div>
 }
+
+<footer>
+    <div style="background-color: #5f5f5f; text-align: left;color: white">
+        @Model.VersionString
+        <span style="float: right">@Model.UserName</span>
+    </div>
+</footer>
+
 
 <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
 <script>
@@ -199,8 +207,9 @@
         function GetData(element) {
             var searchstring = "#" + element.className.replace("btn", "query");
             var text = jQuery(searchstring)[0].innerText;
-            alert(text);
-            window.open(text);
+           var w= window.open(text);
+            /*w.document.title = 'X2';
+            w.document.write('<title>My PDF File Title</title>');*/
         }
         function GetQuery(element) {
         var searchstring = "#" + element.className.replace("btn", "query");
