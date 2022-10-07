@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using X2WebService.Models;
 
 namespace X2WebService.Controllers.Main
 {
@@ -6,7 +7,8 @@ namespace X2WebService.Controllers.Main
     {
         public IActionResult Index()
         {
-            return View();
+            var model = new QueryEditViewModel();
+            return View(model);
         }
     }
 }

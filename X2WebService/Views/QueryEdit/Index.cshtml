@@ -4,9 +4,134 @@
     ViewData["Title"] = "Query Edit";
     Layout = "_Layout";
 }
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
-<div>
-    <textarea>bob
 
-    </textarea>
+
+<div style="padding-top: 30px">
+<div class="container">
+    <div class="row">
+        <div class="col-sm-2" align="left">
+            <input type="text" id="name" placeholder="Query Name" size="12" name="name">
+
+        </div>
+        <div class="col-sm-1" align="center">
+            <select >
+                <option value="" disabled selected>Query Type</option>
+                <option>QUERY</option>
+                <option>PROC</option>
+            </select>
+        </div>
+        <div class="col-sm-2"  align="center">
+            <input type="text" id="category" placeholder="Category" size="12" name="category">
+        </div>
+        <div class="col-sm-2">
+            <input type="text" id="owner" placeholder="Owner Name" size="12" name="owner">
+        </div>
+        <div class="col-sm-1" align="left">
+            <select>
+                <option value="" disabled selected>Source Info</option>
+                <option>Prod</option>
+                <option>Dev</option>
+            </select>
+        </div>
+        <div class="col-sm-4" align="center">
+            <input type="description" id="description" size="30" placeholder="Enter Description" name="description">
+        </div>
+    </div>
+    <div class="row" style="padding-top: 20px">
+        <textarea style="resize: none" rows="5" id="comment" placeholder="Type query or click paste button" name="text"></textarea>
+      
+    </div>
+    <div style="padding-top: 15px">
+ <button type="button" class="btn btn-info">Parse Query</button>
+    </div>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Firstname</th>
+            <th>Lastname</th>
+            <th>Email</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>John</td>
+            <td>Doe</td>
+            <td>john@example.com</td>
+        </tr>
+        <tr>
+            <td>Mary</td>
+            <td>Moe</td>
+            <td>mary@example.com</td>
+        </tr>
+        <tr>
+            <td>July</td>
+            <td>Dooley</td>
+            <td>july@example.com</td>
+        </tr>
+        </tbody>
+    </table>
+    <button type="button" class="btn btn-info">Construct Json Object</button>
+    <div style="border-style: solid">
+        json object
+
+    </div>
+    <button type="button" class="btn btn-success">Copy Query Input</button>
+    <button type="button" class="btn btn-success">Create Query Info</button>
 </div>
+</div>   
+       
+    
+
+<script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+
+<script>
+    function Format(element) {
+        var searchstring = "#" + element.className.replace("btn", "query");
+        var text = jQuery(searchstring)[0].innerText;
+        if (navigator.clipboard) {
+            appCopytoClipBoard(text);
+            alert(text + " Copied");
+        }
+    }
+
+    function Copy(element) {
+        var searchstring = "#" + element.className.replace("btn", "query");
+        var text = jQuery(searchstring)[0].innerText;
+        if (navigator.clipboard) {
+            appCopytoClipBoard(text);
+            alert(text + " Copied");
+        }
+    }
+
+    function Paste(element) {
+        var searchstring = "#" + element.className.replace("btn", "txt");
+        try {
+            if (navigator.clipboard) {
+                navigator.permission.query({ name: "clipboard-read" }).then((result) => {
+                    if (result.state == "granted" || result.state == "prompt") {
+                        navigator.clipboard.readText().then((copiedText) => {
+                                var items = copiedText.split("\n");
+                                for (let i = 0; i < items.length; i++) {
+                                    var key = searchstring + "-" + i.toString().padStart(2, 0);
+                                    $(key).valueOf(items[i]);
+                                }
+                                UpdateQuery(element);
+                            }
+                        );
+                    } else {
+                        alert("Clipboard method not permitted");
+                    }
+                });
+
+
+            } else {
+                alert("fail");
+            }
+        } catch (err) {
+            alert("error:"+err);
+        }
+    }
+</script>
